@@ -1,3 +1,12 @@
+ifndef::leveloffset[]
+:toc: left
+:toclevels: 3
+:icons: font
+
+include::header.adoc[]
+endif::[]
+
+
 === AsciiDocサンプル
 
 とりあえず、HTMLが作成されるかどうかの確認
