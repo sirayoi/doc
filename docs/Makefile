@@ -9,7 +9,9 @@ include $(DOC_ROOT)/asciidoc.mk
 
 HTML_LIST=\
 mkdir_and_copy \
-$(DEST_DIR)/index.html
+$(DEST_DIR)/index.html \
+$(DEST_DIR)/sample.html \
+$(DEST_DIR)/study/dynamoDB.html \
 
 .PHONY: adoc mkdir_and_copy
 

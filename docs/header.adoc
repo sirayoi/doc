@@ -1,2 +1,2 @@
 
-ヘッダーだよ？
+link:./index.html[INDEX]

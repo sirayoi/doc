@@ -4,10 +4,11 @@ ifndef::leveloffset[]
 :toc-title: 目次
 :icons: font
 
-include::header.adoc[]
 endif::[]
 
 = INDEX
+
+include::header.adoc[]
 
 == テーマ
 
@@ -19,6 +20,8 @@ link:./study/dynamoDB.html[DynamoDB]
 image:./images/Arch_Amazon-DynamoDB_64.png["Dynamoイメージ"]
 
 とりあえず、HTMLが作成されるかどうかの確認
+
+link:./sample.html[サンプルadoc]
 
 .ソース
 [source,perl]
