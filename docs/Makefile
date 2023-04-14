@@ -21,6 +21,9 @@ mkdir_and_copy:
 	mkdir -p $(DEST_DIR)
 	-test ! -d $(SRC_IMAGES_DIR) || mkdir -p $(DST_IMAGES_DIR)
 	-test ! -d $(SRC_IMAGES_DIR) || cp $(CP_OPTS) $(SRC_IMAGES_DIR)/* $(DST_IMAGES_DIR)/
+	mkdir -p study
+	-test ! -d study/$(SRC_IMAGES_DIR) || mkdir -p study/$(DST_IMAGES_DIR)
+	-test ! -d study/$(SRC_IMAGES_DIR) || cp $(CP_OPTS) study/$(SRC_IMAGES_DIR)/* $(DST_IMAGES_DIR)/
 
 $(DEST_DIR)/%.html: %.adoc header.adoc
 	asciidoctor --trace $(AD_OPTS_HTML5_ROUGE) -o "$@" "$<"
