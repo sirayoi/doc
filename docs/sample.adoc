@@ -1,3 +1,6 @@
+:stylesdir: ./css
+:stylesheet: monospace.css
+
 ifndef::leveloffset[]
 :toc: left
 :toclevels: 3
