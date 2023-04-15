@@ -1,3 +1,5 @@
+MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
 BASE_DIR=..
 DOC_ROOT=.
 
@@ -25,6 +27,10 @@ mkdir_and_copy:
 	mkdir -p $(DEST_DIR)/study
 	-test ! -d study/$(IMAGES_DIR) || mkdir -p $(DEST_DIR)/study/$(IMAGES_DIR)
 	-test ! -d study/$(IMAGES_DIR) || cp $(CP_OPTS) study/$(IMAGES_DIR)/* $(DEST_DIR)/study/$(IMAGES_DIR)/
+
+	mkdir -p $(DEST_DIR)/css
+	-test ! -d css || mkdir -p $(DEST_DIR)/css
+	-test ! -d css || cp $(CP_OPTS) css/* $(DEST_DIR)/css/
 
 $(DEST_DIR)/%.html: %.adoc header.adoc
 	asciidoctor --trace $(AD_OPTS_HTML5_ROUGE) -o "$@" "$<"

@@ -2,11 +2,11 @@ IMAGES_DIR=images
 CP_OPTS=-n -l
 ROUGE_STYLE=monokai_sublime
 STYLESHEET_FILE=monospace.css
-STYLESHEET_DIR=$(DOC_ROOT)/css
+STYLESHEET_DIR=$(MAKEFILE_DIR))\css
 
 AD_OPTS_HTML5_COMMON=\
 --backend=html5 \
--a stylesheet=$(STYLESHEET_FILE) -a stylesdir=$(STYLESHEET_DIR) -a linkcss \
+-a stylesheet=$(STYLESHEET_FILE) -a stylesdir=$(STYLESHEET_DIR) \
 # -a imagesdir=$(IMAGES_DIR)
 
 AD_OPTS_HTML5_ROUGE=\
@@ -17,3 +17,4 @@ $(AD_OPTS_HTML5_COMMON) \
 
 AD_OPTS_HTML5_STEM=\
 $(AD_OPTS_HTML5_COMMON)
+

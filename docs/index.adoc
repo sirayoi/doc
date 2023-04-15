@@ -4,11 +4,10 @@ ifndef::leveloffset[]
 :toc-title: 目次
 :icons: font
 
+include::header.adoc[]
 endif::[]
 
 = INDEX
-
-include::header.adoc[]
 
 == テーマ
 
@@ -24,14 +23,16 @@ image:./images/Arch_Amazon-DynamoDB_64.png["Dynamoイメージ"]
 link:./sample.html[サンプルadoc]
 
 .ソース
-[source,perl]
+[source, java]
 ----
-# *ソース(source)* ブロック
-# 用途: ソースコードのハイライト表示
-# (`source-highlight` もしくは `pygmentize` が必要です)
-use DBI;
-my $dbh = DBI->connect('...',$u,$p)
-    or die "connect: $dbh->errstr";
+import com.vladsch.flexmark.ext.typographic.TypographicExtension;
+
+public class sample {
+    // コードサンプル
+    public static void String main(String[] arg) {
+        System.out.println("コードサンプルです");
+    }
+}
 ----
 
 .表
@@ -42,6 +43,25 @@ my $dbh = DBI->connect('...',$u,$p)
 | row 1 column 1 | row 1 column 2
 | row 2 column 1 | row 2 column 2
 |===
+
+.ダイアグラム
+[plantuml,alice-bob,svg,role=sequence]
+....
+alice -> bob
+....
+
+.ダイアグラム２
+[graphviz]
+....
+digraph foo {
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+....
 
 == 課外活動
 
