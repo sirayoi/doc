@@ -13,82 +13,34 @@ endif::[]
 
 include::header.adoc[]
 
-== テーマ
-
-=== DynamoDB
-
-情報の確認
-
-link:./study/dynamoDB.html[DynamoDB]
-image:./images/Arch_Amazon-DynamoDB_64.png["Dynamoイメージ"]
-
-とりあえず、HTMLが作成されるかどうかの確認
-
-link:./sample.html[サンプルadoc]
-
-.ソース
-[source, java]
-----
-import com.vladsch.flexmark.ext.typographic.TypographicExtension;
-
-public class sample {
-    // コードサンプル
-    public static void String main(String[] arg) {
-        System.out.println("コードサンプルです");
-    }
-}
-----
-
-.表
-[cols=2*,options="header",cols="25,75"]
+== 索引
+[cols=2*,options="header",cols="25,25,25,75"]
 |===
-| heading column 1
-| heading column 2
-| row 1 column 1 | row 1 column 2
-| row 2 column 1 | row 2 column 2
+2.+| カテゴリ | タイトル | 内容
+
+2.+| 調査
+| link:./study/dynamoDB.html[DynamoDB]
+| DynamoDBに関する備忘メモ
+
+.3+| 課外活動
+| FF14部 
+| link:./ff14/ff14.html[遊び方編]
+| FF14部活動の備忘メモ
+
+.2+| チュートリアル
+| link:./tutorial/tutorial.html#_api_gatewayとlambdaを使ったサーバレスspringアプリケーション[API Gateway + Lambda] 
+| API GatewayとLambdaを使ったサーバレスSpringアプリケーションの備忘メモ
+
+| link:./tutorial/tutorial.html#_aws_ecs上に構築するspringアプリケーション[ECS]
+| AWS ECS上に構築するSpringアプリケーションの備忘メモ
+
+2.+| その他
+| link:./memo/devEnv.html[開発環境]
+| 開発環境における備忘メモ
+
 |===
 
-.ダイアグラム
-[plantuml,alice-bob,svg,role=sequence]
-....
-alice -> bob
-....
 
-.ダイアグラム２
-[graphviz]
-....
-digraph foo {
-  node [style=rounded]
-  node1 [shape=box]
-  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
-  node3 [shape=record, label="{ a | b | c }"]
-
-  node1 -> node2 -> node3
-}
-....
-
-.ダイアグラム3
-[mermaid]
-....
-sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>John: Hello John, how are you?
-    loop Healthcheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
-....
-
-== 課外活動
-
-=== FF14部
-
-=== チュートリアル
-
-== 作業メモ
-
-=== 開発環境メモ
+== 参考
+ * https://debugroom.github.io/technical-academy/kickoff/202304/slides/index.html[Tec Academy]
+ * https://news.mynavi.jp/techplus/series/AWS/[AWSで作るクラウドネイティブアプリケーションの基本]

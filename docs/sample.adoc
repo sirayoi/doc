@@ -6,14 +6,141 @@ ifndef::leveloffset[]
 :toclevels: 3
 :toc-title: 目次
 :icons: font
+
 endif::[]
 
-= サンプルだよ
+= INDEX
 
 include::header.adoc[]
 
-== AWSデベロッパーガイド抜粋
+== テーマ
 
-画像テスト
+=== DynamoDB
 
-image:./study/images/Arch_Amazon-EC2_64.png["EC2画像"]
+情報の確認
+
+link:./study/dynamoDB.html[DynamoDB]
+image:./images/Arch_Amazon-DynamoDB_64.png["Dynamoイメージ"]
+
+とりあえず、HTMLが作成されるかどうかの確認
+
+link:./sample.html[サンプルadoc]
+
+.ソース
+[source, java]
+----
+import com.vladsch.flexmark.ext.typographic.TypographicExtension;
+
+public class sample {
+    // コードサンプル
+    public static void String main(String[] arg) {
+        System.out.println("コードサンプルです");
+    }
+}
+----
+
+.表
+[cols=2*,options="header",cols="25,75"]
+|===
+| heading column 1
+| heading column 2
+| row 1 column 1 | row 1 column 2
+| row 2 column 1 | row 2 column 2
+|===
+
+.ダイアグラム
+[plantuml,alice-bob,svg,role=sequence]
+....
+alice -> bob
+....
+
+.ダイアグラム
+[plantuml,alice-bob,svg,role=sequence]
+....
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+....
+
+.状態遷移図
+[plantuml,svg]
+....
+[*] --> State1
+State1 --> [*]
+State1 : this is a string
+State1 : 日本語はいけるか、いけたわ
+
+State1 -> State2
+State2 --> [*]
+....
+
+.アクティビティ図
+
+[plantuml,svg]
+....
+start
+
+:Hello world;
+
+:This is defined on 
+several **lines**;
+
+if (counter?) equals (yes) then
+:print 5;
+(no) elseif (condition B ?) then (OK)
+:print not 5;
+else
+:print not 9;
+endif
+
+:test;
+
+stop
+....
+
+
+.ダイアグラム２
+[graphviz]
+....
+digraph foo {
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+....
+
+.ダイアグラム3
+[mermaid]
+....
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+....
+
+== 課外活動
+
+=== FF14部
+
+=== チュートリアル
+
+== 作業メモ
+
+=== 開発環境メモ

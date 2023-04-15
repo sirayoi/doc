@@ -1,0 +1,18 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+ifndef::leveloffset[]
+:toc: left
+:toclevels: 4
+:toc-title: 目次
+:icons: font
+endif::[]
+
+= FF14部
+
+// インデックス
+include::../headerLevel2.adoc[]
+
+// 遊び編
+include::play.adoc[]
+

@@ -1,0 +1,17 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+ifndef::leveloffset[]
+:toc: left
+:toclevels: 4
+:toc-title: 目次
+:icons: font
+endif::[]
+
+= 開発環境構築・使い方の備忘メモ
+// 索引
+include::../headerLevel2.adoc[]
+
+== ローカルPCインストール
+
+== VsCodeの拡張機能

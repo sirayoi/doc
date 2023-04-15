@@ -12,6 +12,9 @@ mkdir_and_copy \
 $(DEST_DIR)/index.html \
 $(DEST_DIR)/sample.html \
 $(DEST_DIR)/study/dynamoDB.html \
+$(DEST_DIR)/ff14/ff14.html \
+$(DEST_DIR)/tutorial/tutorial.html \
+$(DEST_DIR)/memo/devEnv.html \
 
 .PHONY: adoc mkdir_and_copy
 
@@ -26,10 +29,6 @@ mkdir_and_copy:
 	-test ! -d study/$(IMAGES_DIR) || mkdir -p $(DEST_DIR)/study/$(IMAGES_DIR)
 	-test ! -d study/$(IMAGES_DIR) || cp $(CP_OPTS) study/$(IMAGES_DIR)/* $(DEST_DIR)/study/$(IMAGES_DIR)/
 
-	mkdir -p $(DEST_DIR)/css
-	-test ! -d css || mkdir -p $(DEST_DIR)/css
-	-test ! -d css || cp $(CP_OPTS) css/* $(DEST_DIR)/css/
-
-$(DEST_DIR)/%.html: %.adoc header.adoc
+$(DEST_DIR)/%.html: %.adoc
 	asciidoctor --trace $(AD_OPTS_HTML5_ROUGE) -o "$@" "$<"
   

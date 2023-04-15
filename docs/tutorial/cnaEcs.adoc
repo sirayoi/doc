@@ -1,0 +1,14 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== AWS ECS上に構築するSpringアプリケーション
+
+=== 諸情報：
+* 実行日時：2023/04/09～
+
+=== 変更点：
+* VPCはVPC一括作成を使用
+* コーディングはPrivateSubnetに構成したCloud9を利用
+* GitHubはCodeCommitを使用
+* DockerHubはECRのprivateリポジトリを利用
+* ECSは2022年11月ごろに変わった画面に沿って利用（AutoScalingグループも作成）

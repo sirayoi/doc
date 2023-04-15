@@ -10,10 +10,8 @@ endif::[]
 
 = DynamoDB
 
-include::./header.adoc[]
+include::../headerLevel2.adoc[]
 
 == AWSデベロッパーガイド抜粋
-
-画像テスト
 
 image:./images/Arch_Amazon-EC2_64.png["EC2画像"]

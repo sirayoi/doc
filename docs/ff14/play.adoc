@@ -1,0 +1,10 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== 遊び編
+
+=== はじめかた
+
+=== 知っておくと便利（かも）
+
+=== リンク集
