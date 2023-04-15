@@ -2,7 +2,7 @@ IMAGES_DIR=images
 CP_OPTS=-n -l
 ROUGE_STYLE=monokai_sublime
 STYLESHEET_FILE=monospace.css
-STYLESHEET_DIR=$(MAKEFILE_DIR))\css
+STYLESHEET_DIR=./css
 
 AD_OPTS_HTML5_COMMON=\
 --backend=html5 \

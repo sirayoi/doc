@@ -1,5 +1,3 @@
-MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-
 BASE_DIR=..
 DOC_ROOT=.
 
