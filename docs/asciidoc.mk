@@ -6,7 +6,7 @@ STYLESHEET_DIR=./css
 
 AD_OPTS_HTML5_COMMON=\
 --backend=html5 \
--a stylesheet=$(STYLESHEET_FILE) -a stylesdir=$(STYLESHEET_DIR) \
+#-a stylesheet=$(STYLESHEET_FILE) -a stylesdir=$(STYLESHEET_DIR) \
 # -a imagesdir=$(IMAGES_DIR)
 
 AD_OPTS_HTML5_ROUGE=\

@@ -10,6 +10,8 @@ endif::[]
 
 = DynamoDB
 
+include::./header.adoc[]
+
 == AWSデベロッパーガイド抜粋
 
 画像テスト
