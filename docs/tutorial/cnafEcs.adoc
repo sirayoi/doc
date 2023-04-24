@@ -1,0 +1,176 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== AWS ECS上に構築するSpringアプリケーション
+
+=== 諸情報
+* 実行日時：2023/04/09～
+
+==== 対象
+* https://news.mynavi.jp/techplus/article/techp4354/[AWS ECS上に構築するSpringアプリケーション(1)]
+* https://news.mynavi.jp/techplus/article/techp4359/[AWS ECS上に構築するSpringアプリケーション(2)]
+* https://news.mynavi.jp/techplus/article/techp4363/[AWS ECS上に構築するSpringアプリケーション(3)]
+* https://news.mynavi.jp/techplus/article/techp4390/[AWS ECS上に構築するSpringアプリケーション(4)]
+* https://news.mynavi.jp/techplus/article/techp4405/[AWS ECS上に構築するSpringアプリケーション(5)]
+* https://news.mynavi.jp/techplus/article/techp4408/[AWS ECS上に構築するSpringアプリケーション(6)]
+* https://news.mynavi.jp/techplus/article/techp4354/[AWS ECS上に構築するSpringアプリケーション(7)]
+
+==== 変更点
+* VPCはVPC一括作成を使用
+* コーディングはPrivateSubnetに構成したCloud9を利用
+* GitHubはCodeCommitを使用
+* DockerHubはECRのprivateリポジトリを利用
+* ECSは2022年11月ごろに変わった画面に沿って利用（AutoScalingグループも作成）
+
+==== 今回利用した接頭辞
+* 全体： ecs-spring
+* サブネット or アプリ：
+  * Public or backend-for-frontend ： bff or backend-for-frontend
+  * Private or backend ： backend
+
+=== VPCの作成
+* https://news.mynavi.jp/techplus/article/techp4354/[（元ネタ）AWS ECS上に構築するSpringアプリケーション(1)]
+
+==== 変更点
+* VPC作成から「2Public / 2Private / 1つのAZにNatGateway」で自動作成する
+** 設定値（参考）：
+*** VPCのCURD：10.1.0.0/16を利用（Subnetは自動でいかが割り当てられた：10.1.X.0/20) 
+*** VPCエンドポイントのS3は無し
+** 以下を自動で作成してくれる
+*** VPCの作成
+*** パブリックサブネットとプライベートサブネットの作成
+*** カスタムルートテーブルの作成／メインルートテーブルの設定
+*** インターネットゲートウェイの作成／VPCへのアタッチ
+*** NATゲートウェイの設定／アタッチ（ElasticIpの作成もしちゃうので料金発生注意）
+** ただし、デフォルトだとパブリックIPの自動割り当てはOFFになっているので必要な場合は別途追加が必要
+
+=== ALBの作成
+* https://news.mynavi.jp/techplus/article/techp4359/[（元ネタ）AWS ECS上に構築するSpringアプリケーション(2)]
+
+==== 変更点
+* セキュリティグループとターゲットグループはロードバランサ―の画面で[create xxx]を使って途中で作って設定していく（作成後更新忘れずに）
+* ターゲットグループの作成
+** ターゲットグループ名：bffapp-alb-tg
+*** 理由不明だが（bff-alb-tg）だとターゲットグループとして表示されないので…
+** ターゲットの種類変更（Basic configuration）：Application Load Balancer
+** ヘルスチェックは念のためstatic配下：
+*** bffの設定：/backend-for-frontend/static/index.html
+*** backendの設定：/backend/api/v1/users
+* リスナールールの追加
+** （画面変更影響と思われる）Listener Rule "1" > Manage Rule にパス良い設定画面へ遷移
+
+=== spirngアプリケーションの開発
+ * [（元ネタ）AWS ECS上に構築するSpringアプリケーション(3)](https://news.mynavi.jp/techplus/article/techp4363/)
+
+==== 変更点
+* 開発環境としてCloud9を準備
+** VPCとして作成したprivateSubnetを指定する（NatGatewayが設定されているのでCloud9にアクセス可能のはず）
+** デフォルトのままだとCloud9のEC2の権限としてECRへログインする `GetAuthorizationToken` 権限がないので、Cloud9のEC2の権限を変更する（一旦下記の通り `AdministratorAccess` を設定） + 
+【★：本来developer用権限を作って設定する】
+*** https://go-journey.club/archives/17029[（参考）【AWS】Cloud9からIAM権限のコマンド（IAMユーザー、IAMロールの作成など）が実行できるように設定する手順]
+** CodeCommitを利用するGit環境の準備として、Git認証ヘルパーを設定する + 
+[source, git]
+----
+git config --global credential.helper '!aws codecommit credential-helper $@'
+git config --global credential.UseHttpPath true
+----
+** Gitのユーザ名とパスワードを初期設定する（存在しないメールアドレスでOK） + 
+[source, git]
+----
+git config --global user.name "xxx"
+git config --global user.email "xxx@xxx"
+----
+** Mavenをインストールする + 
+[source, command]
+----
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+----
+* 開発環境として、CodeCommitにリポジトリを新規作成（2個まとめてなのでecs-spring）
+* CodeCommitに設定されたHttpsのcloneコマンドを利用して、Cloud9でクローンする
+* 指定のGitHubよりダウンロードしたZipを解凍して、Cloud9のcloneしたフォルダ内に配置（Webサイトの説明よりちょっとソースコード多いが説明はWebサイト参照）
+* ソースコードの必要個所を書き換える
+** backend-for-frontendのapplication.xmlのdns変更（backendのターゲットグループを設定）
+** 次の回用だけども、DockerFileの記述内容も修正しておく（実施してみるとエラーになるから後から記載でもいい）
+*** wget に `--no-check-certificate` を追加
+*** [line-through]#クローン先をCodeCommitのリポジトリに変更#【★】本来ここでCodeCommitからCloneから実行したいけど上手く動かなかったので後で検討
+*** クローンをやめてCloud9のローカルファイルのCOPYに変更（backend、backend-for-frontend別にコピー）
+*** pomの実行も全体ではなく、各アプリに限定して実施
+*** backend-for-frontend の pom.xmlの `spring-cloud-starter-aws` でそのままだとエラーになるのでバージョンを指定 `<version>2.1.2.RELEASE</version>` 
+* mvnコマンドでmvnを実行してみる【★】本来ここでmaven実行して試したいところだけど、ちょっと割愛、mavenはCloud9にデフォルトでは入ってないから一旦スキップ
+* 下記コマンドでCodeCommitへPushする
+
+[git]
+----
+git add -A
+git commit -m "init."
+git push origin master
+----
+
+* ブラウザのCodeCommitから見てソースコードが表示されればOK
+
+=== Dockerコンテナの作成・DockerHubへのプッシュ
+* https://news.mynavi.jp/techplus/article/techp4390/[AWS ECS上に構築するSpringアプリケーション(4)]
+
+==== 変更点
+* Cloud9上でDockerImageをタグ付きで作成する(Copyをフォルダ指定で実施したいため、ecs-srpingフォルダにて下記コマンドを利用して実施)
+
+[docker]
+----
+docker build -f backend/Dockerfile . -t backend:latest
+docker build -f backend-for-frontend/Dockerfile . -t backend-for-frontend:latest
+----
+
+* 正常にDockerImageが出来たか確認するべく、dockerを動かしてみる（ポート忘れるとアクセスできないので注意）
+
+[docker]
+----
+docker run -p 8080:8080 --name [name] [imageID](backend-for-frontend用)
+----
+
+* preview から　preview Run Application で表示したウィンドウにアプリパスを追加して幼児確認
+** bffアプリ：/backend + 
+   `Hello! AWS ECS sample!` 画面が表示されればOK +
+   （新しいターミナルを起動して、runしたコンテナを 'docker stop [contenaID]' しておく）
+* ecrにdocker image 格納用のリポジトリをアプリ別に用意する
+* 各リポジトリの「プッシュコマンドの表示」を参考にECRにプッシュする
+** login Successにならない場合、トークンの取得に失敗する場合、
+
+=== ECSクラスターの作成
+* https://news.mynavi.jp/techplus/article/techp4405/[（元ネタ）AWS ECS上に構築するSpringアプリケーション(5)]
+
+==== 変更点
+* 2022年11月頃の画面変更で設定
+** サブネットはインスタンスを分散させたい対象のサブネットを複数すべて選択
+** EC2を選択すると「AutoScaling設定」が必要になっているので新規作成
+*** インスタンスの数：最低：0、最大：5
+*** インスタンスタイプ： `t2.small` が最低ライン（CPU：1 vCPU、メモリ：1GBが前提）
+** 作成されたECSクラスターのインフラストラクチャより自動生成されたAutoScalingを選択
+*** AutoScalingグループの起動テンプレートを選択し「テンプレートの変更（新しいバージョンの作成）」を選択
+*** EC2インスタンスに設定するセキュリティグループを設定する
+*** （publicの場合）高度なネットワーク設定：
+**** ネットワークインターフェースの「パブリックIPの自動割り当て」も設定する +   
+（※サブネットの設定でパブリックIPの自動割り当てが設定されていれば本設定は不要）
+*** AutoScalingグループの起動テンプレートを「編集」し、バージョンを `latest` に変更
+
+=== ECSタスク作成
+* https://news.mynavi.jp/techplus/article/techp4408/[（元ネタ）AWS ECS上に構築するSpringアプリケーション(6)]
+
+==== 変更点
+* タスクサイズ：CPU：1 vCPU、メモリ：1GB
+* ポートマッピング：ホスト：80、コンテナ：8080
+* タスク実行時のロール：なし
+
+==== ECSサービスの作成
+* https://news.mynavi.jp/techplus/article/techp4416/[（元ネタ）AWS ECS上に構築するSpringアプリケーション(7)]
+
+==== 変更点
+* 設定内容に大きな変更なし
+
+==== 補足・注意点
+* サービスを起動するとサブネット分のインスタンスが起動される（タスク数が１でも）が、時間がたつとタスクが起動されなかったインスタンスは停止される
+* サービスを0に更新してしばらくほっておくとEC2の最低数の0個まで減らしてくれて、クラスター設定を消さずにコスト削減できるのは非常に良い
+* インスタンスに対してコンテナ1つ分のメモリしか確保してないので、タスク定義を変更してサービスのタスクを置き換えようとするとエラーになる可能性あり
+** サービスを0にして更新し、起動中のEC2インスタンスを「終了」させて、サービスを1に更新すると起動できるはず（おそらく）
+

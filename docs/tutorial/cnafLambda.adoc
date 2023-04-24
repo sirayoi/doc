@@ -1,0 +1,73 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== API GatewayとLambdaを使ったサーバレスSpringアプリケーション
+
+=== 諸情報
+* 実行日時：2023/03/09～
+
+==== 対象
+* https://news.mynavi.jp/techplus/article/techp4316/[API GatewayとLambdaを使ったサーバレスSpringアプリケーション(1)] … Springアプリケーションの作成
+* https://news.mynavi.jp/techplus/article/techp4318/[API GatewayとLambdaを使ったサーバレスSpringアプリケーション(2)] … Lambdaの設定
+* https://news.mynavi.jp/techplus/article/techp4321/[API GatewayとLambdaを使ったサーバレスSpringアプリケーション(3)] … API Gatewayの設定
+
+=== Springアプリケーションの作成
+NOTE: 指定のJava8は古いのでどうかって話はあるが、Java8 / Maven2系 の組み合わせじゃないとサンプルプログラムが動かないのでJava8をセットアップ + 
+（Java11から利用しているaws-lambda-javaのメソッドが非推奨になり利用できない）
+
+* https://news.mynavi.jp/techplus/article/techp4316/[（元ネタ）API GatewayとLambdaを使ったサーバレスSpringアプリケーション(1)]
+
+==== 実施メモ
+* ローカルPCのVSCodeを準備
+** 拡張機能インストール：
+*** Spring Boot Extension Pack（Spring Boot Dashborad、Spring Boot Tools、Spring Initializr Java Support）
+*** Extension Pack for Java（上記をインストールするとインストールしろって怒られる）
+*** Maven for Java（怒られたか忘れたが、必要）
+** 「Extension Pack for Java」の手順に従い、Javaの開発環境設定
+*** Java8のAdoptOpenJDKを入手して環境準備
+*** PCの環境変数のユーザ設定、JAVA_HOMEにJDKのパスに設定
+*** PCの環境変数のシステム設定、PathにJDKのbinを追加
+* ソースコードは https://github.com/debugroom/mynavi-sample-aws-lambda[GitHub] よりダウンロードして展開
+* VSCodeで展開フォルダを開く
+* VSCodeのMavenの拡張機能により `mvn package` を実行してFatJarを作成する（targetフォルダに作成される）
+  * pom.xmlに対してバージョン情報を追記しないとうまく動かなかった気もするので、必要に応じて設定【★】
+
+=== Lambdaの設定
+* https://news.mynavi.jp/techplus/article/techp4318/[（元ネタ）API GatewayとLambdaを使ったサーバレスSpringアプリケーション(2)]
+
+==== 実施メモ
+NOTE: 画面が違うので、設定箇所がどこだってなるけどそんなに変わらない
+
+* Lambdaで行った設定：
+** 登録Jar：mynavi-sample-aws-lambda-0.0.1-SNAPSHOT-aws.jar
+** ハンドラー：org.debugroom.mynavi.sample.aws.lambda.ApiGatewayEventHandler
+** 環境変数：FUNCTION_NAME：apiGatewayEventFunction
+
+=== API Gatewayの設定
+* https://news.mynavi.jp/techplus/article/techp4321/[（元ネタ）API GatewayとLambdaを使ったサーバレスSpringアプリケーション(3)]
+
+==== 実施メモ
+* 手順通りに実施する、ただし、以下だけ注意
+** devステージにデプロイしてからcurlで検証するときのコマンドは以下のいずれかが正しい（'があると失敗する）
+[curl]
+----
+curl -d "{\"test\":\"TestMessage\"}" https://bzsn0oqa9g.execute-api.ap-northeast-1.amazonaws.com/dev/sample
+
+curl -d {\"test\":\"TestMessage\"} https://bzsn0oqa9g.execute-api.ap-northeast-1.amazonaws.com/dev/sample
+----
+
+** NGケースの例：jsonパーサーエラーが発生する
+[curl]
+----
+curl -d '{"test":"TestMessage"}' https://bzsn0oqa9g.execute-api.ap-northeast-1.amazonaws.com/dev/sample
+----
+
+NOTE: 返却文字列もjsonじゃないとダメ説をwebで見たが、関係なかった「Complete!」でもOK
+
+NOTE: エラーが発生しても詳細がわからないので、ログ設定を追加する必要がある、その方法　<<補足：ログ設定>>
+
+==== 補足：ログ設定
+https://qiita.com/sugimount-a/items/90d7d83e3017d3cf5186[（参考）API Gateway のアクセスログを取得してみた]
+
+* API Gateway用のIAMロールを作成する
+* API GatewayのARNとして上記で作成板IAMロールを設定する
