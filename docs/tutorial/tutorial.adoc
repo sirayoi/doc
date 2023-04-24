@@ -3,7 +3,7 @@
 
 ifndef::leveloffset[]
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :toc-title: 目次
 :icons: font
 endif::[]
@@ -14,8 +14,8 @@ endif::[]
 include::../headerLevel2.adoc[]
 
 // API GatewayとLambdaを使ったサーバレスSpringアプリケーション
-include::cnaLambda.adoc[]
+include::cnafLambda.adoc[]
 
 // AWS ECS上に構築するSpringアプリケーション
-include::cnaEcs.adoc[]
+include::cnafEcs.adoc[]
 
