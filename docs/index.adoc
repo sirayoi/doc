@@ -19,7 +19,7 @@ include::header.adoc[]
 2.+| カテゴリ | タイトル | 内容
 
 2.+| 調査
-| link:./study/dynamoDB.html[DynamoDB]
+| link:./study/01-00_dynamoDB.html[DynamoDB]
 | DynamoDBに関する備忘メモ
 
 .3+| 課外活動

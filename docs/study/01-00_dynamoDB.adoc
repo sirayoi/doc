@@ -1,0 +1,74 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+ifndef::leveloffset[]
+:toc: left
+:toclevels: 4
+:toc-title: 目次
+:icons: font
+endif::[]
+
+= DynamoDB
+
+include::../headerLevel2.adoc[]
+
+== AWSデベロッパーガイド Amazon DynamoDB 抜粋・解釈
+
+* https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Introduction.html[AWSデベロッパーガイド抜粋]
+
+include::01-0101_devguid_function.adoc[]
+
+include::01-0102_devguid_component.adoc[]
+
+include::01-0103_devguid_api.adoc[]
+
+=== 仕組み（パーティションとデータ配置、）
+
+
+=== リレーショナルDBとの違い
+
+
+===== 作業メモ
+* 調査状況（概要理解）：AWSデベロッパーガイド
+[cols=2,options="header"]
+|===
+| 章 | 状況
+
+| Amazon DynamoDB とは    | 読了済
+| DynamoDB のセットアップ | スキップ
+| DynamoDB にアクセスする | スキップ
+| DynamoDB の使用開始 | スキップ
+| DynamoDB および AWS SDK の使用開始 | スキップ 
+| DynamoDB を使用したプログラミング | スキップ
+| DynamoDB の操作 | スキップ
+| DAX とインメモリアクセラレーション | 未確認
+| NoSQL Workbench | 未確認
+| コード例 | スキップ（例は見てもいいかも）
+| セキュリティ | 未確認
+| Monitoring | 未確認
+| ベストプラクティス | 読了中
+| 他の AWS サービスとの統合 | 未確認
+| クォータと制限 | 未確認
+| API リファレンス | スキップ
+| 付録 | 未確認
+| ドキュメント履歴 | スキップ
+|===
+
+* 調査状況（実施）：AWSデベロッパーガイド
+[cols=2,options="header"]
+|===
+| 章 | 状況
+
+| DynamoDB のセットアップ | スキップ
+| DynamoDB にアクセスする | スキップ
+| DynamoDB の使用開始 | スキップ
+| DynamoDB および AWS SDK の使用開始 | スキップ 
+| DynamoDB を使用したプログラミング | スキップ
+| DynamoDB の操作 | スキップ
+| NoSQL Workbench | スキップ
+| コード例 | スキップ
+| API リファレンス | スキップ
+|===
+
+
+image:./images/Arch_Amazon-EC2_64.png["EC2画像"]
