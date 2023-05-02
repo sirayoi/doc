@@ -11,7 +11,7 @@ HTML_LIST=\
 mkdir_and_copy \
 $(DEST_DIR)/index.html \
 $(DEST_DIR)/sample.html \
-$(DEST_DIR)/study/dynamoDB.html \
+$(DEST_DIR)/study/01-00_dynamoDB.html \
 $(DEST_DIR)/ff14/ff14.html \
 $(DEST_DIR)/tutorial/tutorial.html \
 $(DEST_DIR)/memo/devEnv.html \
