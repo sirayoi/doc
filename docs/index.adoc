@@ -22,7 +22,7 @@ include::header.adoc[]
 | link:./study/01-00_dynamoDB.html[DynamoDB]
 | DynamoDBに関する備忘メモ
 
-.3+| 課外活動
+.5+| 課外活動
 | FF14部 
 | link:./ff14/01-00_ff14.html[遊び方編]
 | FF14部活動の備忘メモ
