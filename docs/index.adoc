@@ -27,7 +27,7 @@ include::header.adoc[]
 | link:./ff14/01-00_ff14.html[遊び方編]
 | FF14部活動の備忘メモ
 
-.2+| チュートリアル
+.4+| チュートリアル
 | link:./tutorial/01-00_tutorial.html#_api_gatewayとlambdaを使ったサーバレスspringアプリケーション[API Gateway + Lambda] 
 | API GatewayとLambdaを使ったサーバレスSpringアプリケーションの備忘メモ
 
