@@ -1,6 +1,6 @@
 
 link:./../index.html[INDEX]
  | link:./../study/01-00_dynamoDB.html[DynamoDB]
- | link:./../ff14/ff14.html[FF14]
- | link:./../tutorial/tutorial.html[Tutorial]
- | link:./../memo/devEnv.html[DevEnv]
+ | link:./../ff14/01-00_ff14.html[FF14]
+ | link:./../tutorial/01-00_tutorial.html[Tutorial]
+ | link:./../memo/01-00_devEnv.html[DevEnv]

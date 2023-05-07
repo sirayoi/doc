@@ -24,18 +24,24 @@ include::header.adoc[]
 
 .3+| 課外活動
 | FF14部 
-| link:./ff14/ff14.html[遊び方編]
+| link:./ff14/01-00_ff14.html[遊び方編]
 | FF14部活動の備忘メモ
 
 .2+| チュートリアル
-| link:./tutorial/tutorial.html#_api_gatewayとlambdaを使ったサーバレスspringアプリケーション[API Gateway + Lambda] 
+| link:./tutorial/01-00_tutorial.html#_api_gatewayとlambdaを使ったサーバレスspringアプリケーション[API Gateway + Lambda] 
 | API GatewayとLambdaを使ったサーバレスSpringアプリケーションの備忘メモ
 
-| link:./tutorial/tutorial.html#_aws_ecs上に構築するspringアプリケーション[ECS]
+| link:./tutorial/01-00_tutorial.html#_aws_ecs上に構築するspringアプリケーション[ECS]
+| AWS ECS上に構築するSpringアプリケーションの備忘メモ
+
+| link:./tutorial/01-00_tutorial.html#_amazon_rdsにアクセスするspringアプリケーション[RDS]
+| AWS ECS上に構築するSpringアプリケーションの備忘メモ
+
+| link:./tutorial/01-00_tutorial.html#_amazon_dynamodbにアクセスするspringアプリケーション[DynamoDB]
 | AWS ECS上に構築するSpringアプリケーションの備忘メモ
 
 2.+| その他
-| link:./memo/devEnv.html[開発環境]
+| link:./memo/01-00_devEnv.html[開発環境]
 | 開発環境における備忘メモ
 
 |===

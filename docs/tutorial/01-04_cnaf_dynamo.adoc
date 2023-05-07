@@ -1,0 +1,40 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== Amazon DynamoDBにアクセスするSpringアプリケーション
+
+=== 諸情報
+* 実行日時：04/30
+
+==== 対象
+* https://news.mynavi.jp/techplus/article/techp4498/[Amazon DynamoDBの概要および構築と認証情報の作成] … DynamoDBの構築と認証情報の作成
+* https://news.mynavi.jp/techplus/article/techp4506/[Spring Data DynamoDBを用いたアプリケーション(1)]
+* https://news.mynavi.jp/techplus/article/techp4512/[Spring Data DynamoDBを用いたアプリケーション(2)]
+
+=== DynamoDBの構築と認証情報の作成
+* https://news.mynavi.jp/techplus/article/techp4498/[（元ネタ）Amazon DynamoDBの概要および構築と認証情報の作成]
+
+==== 変更点
+* （移動）「アクション」内に「項目の作成」
+* （追加）「新しい属性の追加」から属性が追加できる
+* （変更）DynamoDB用のIAM認証情報の作成は「RDSアプリケーションの作成」と同じく、アクセスキーは別途作成が必要<<IAM作成の変更>>参照
+
+=== DynamoDBにアクセスするアプリケーション（基礎）
+* https://news.mynavi.jp/techplus/article/techp4506/[（元ネタ）Spring Data DynamoDBを用いたアプリケーション(1)]
+
+==== 変更点
+* https://github.com/debugroom/mynavi-sample-spring-data-dynamodb[GitHub]からソースコードをZipでダウンロードして、必要個所を修正
+* ローカル環境におけるIAM認証情報の設定
+** 「RDSアプリケーションの作成」と同じく、AWS Toolkidsを利用して<<VSCodeにおけるAWS認証情報の追加作成>>を実施
+table）
+
+=== DynamoDBにアクセスするアプリケーション（DB処理の実装）
+* https://news.mynavi.jp/techplus/article/techp4506/[（元ネタ）Spring Data DynamoDBを用いたアプリケーション(1)]
+
+==== 変更点
+* DynammoDBの生成名を変更していたため以下テーブル名変更
+** MynaviSampleTable.java:@DynamoDBTableの値変更（DynamoDBのテーブル名：test-dynamo-table）
+
+==== 感想
+* GitHubのソースコードを丸パクリしているので、対して困っていないが、なかなかハード
+* AWSのConnectionを作成してみたものの、dynamoDB用のIAMユーザがきちんと使われているかは結構謎…。使われていないっぽいな…。

@@ -26,6 +26,12 @@ image:./images/Arch_Amazon-DynamoDB_64.png["Dynamoイメージ"]
 
 link:./sample.html[サンプルadoc]
 
+// コメントアウト
+
+[line-through]#取り消し線#
+
+**太文字**
+
 .ソース
 [source, java]
 ----
@@ -50,9 +56,9 @@ public class sample {
 
 .ダイアグラム
 [plantuml,alice-bob,svg,role=sequence]
-....
+----
 alice -> bob
-....
+----
 
 .ダイアグラム
 [plantuml,alice-bob,svg,role=sequence]

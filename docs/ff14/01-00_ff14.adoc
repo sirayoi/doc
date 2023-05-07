@@ -14,5 +14,5 @@ endif::[]
 include::../headerLevel2.adoc[]
 
 // 遊び編
-include::play.adoc[]
+include::01-01_play.adoc[]
 

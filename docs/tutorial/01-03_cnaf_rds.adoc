@@ -1,0 +1,218 @@
+:stylesdir: .././css
+:stylesheet: monospace.css
+
+== Amazon RDSにアクセスするSpringアプリケーション
+
+=== 諸情報
+* 実行日時：2023/04/28～04/30
+
+==== 対象
+* https://news.mynavi.jp/techplus/article/techp4422/[Amazon RDSにアクセスするSpringアプリケーション(1)] … RDSの作成・プログラムからのアクセス用のユーザ認証情報の作成
+* https://news.mynavi.jp/techplus/article/techp4426/[Amazon RDSにアクセスするSpringアプリケーション(2)] … RDSへのテーブル構築とアプリケーション実装（基本）
+* https://news.mynavi.jp/techplus/article/techp4449/[Amazon RDSにアクセスするSpringアプリケーション(3)] … アプリケーション実装（DB処理実装）
+
+=== RDSの作成・プログラムからのアクセス用のユーザ認証情報の作成
+* https://news.mynavi.jp/techplus/article/techp4422/[（元ネタ）Amazon RDSにアクセスするSpringアプリケーション(1)]
+
+==== 変更点：サンプルで設定した値
+NOTE:: 全般敵に設定する位置が変更されたり新しい設定が増えているが、大本とは変わらず
+
+===== RDBの作成
+* （追加）データベースの作成方法を選択：標準作成
+* エンジンのオプション
+** （移動）エンジンバージョン：PostgreSQL 14.6-R1（デフォルト）
+* （名変） ユースケース ⇒ テンプレート ：無料枠を選択
+* （追加） 可用性と耐久性／デプロイオプション ：（無料枠の場合、選択不可）
+* 設定（データベース設定の一部）
+** （削除）ライセンスモデル（テンプレートで決まるか？）
+** （設定参考）DBインスタンス識別子：database-1
+** （追加）AWS Secrets Managerでマスター情報を管理する：スキップ
+** （追加）パスワードの自動生成：スキップ
+** その他は、順序などが違うが、該当項目は記載されている
+* インスタンスの設定（データベース設定の一部）
+* ストレージ（データベース設定の一部）
+** （設定参考）ストレージ割り当て：20GB
+** （追加）ストレージの自動スケーリング：（デフォルト設定のまま追加）
+* 接続（データベース設定とデータベースの詳細設定の一部）
+** （追加）コンピューティングリソース：EC2コンピューティングリソースに接続しない（デフォルト）
+** （追加）ネットワークタイプ：IPv4
+** （設定参考）VPC：デフォルト（デフォルト）
+** （設定参考）DBサブネットグループ：デフォルト（デフォルト）
+** （設定参考）パブリックアクセス：あり
+** （設定参考）動作変化：VPCセキュリティグループ：自動生成無し、名前入力：rdb-vpc-sg
+** （設定参考）アベイラビリティゾーン：ap-northeast-1a
+** （追加）RDS Proxy：スキップ
+** （追加）認証機関：（デフォルト）
+* データベース認証（データベースの詳細設定のIAM DB認証）
+** （動作変化）選択式へ：パスワードとIAMデータベース認証
+* モニタリング（データベースの詳細設定の一部）
+** （名変更）マスターキー　⇒ AWS KMSキー：（default）
+* 追加設定（データベースの詳細設定の一部）
+** （設定参照）最初のデータベース名：testdb … ここを忘れると<<エラー発生対応>>の憂き目に会うので、気を付けるべし
+** （設定参考）その他、すべてデフォルトのままで利用
+* Estimated Monthly costs （追加）… コスト予想を表示してくれる
+* 概算月間コスト （追加）… 月間のコスト予想を表示してくれる（と思う）
+
+
+===== IAM作成の変更
+色々場所変更（現在はアクセスキーによる接続は推奨されていないので本来はよくないパターンかも…）
+
+* IAM作成
+** （設定参考）ユーザ名：rds-admin-user
+** （動作変更）コンソールアクセスがあるかどうかを選択する式へ：AWSマネジメントコンソールへのアクセスを提供する：チェック無し
+** （設定参考）許可オプション： ポリシーを直接アタッチする
+** （設定参考）許可ポリシー：AmazonRDSFullAccess
+* アクセスキーの取得 … ユーザを作成してから別途取得する方法に変更
+** 作成したIAMユーザを選択 ＞ セキュリティ認証情報タブ ＞ アクセスキーで「アクセスキーを作成」
+** 「AWSの外部で実行されるアプリケーションを選択」して、「次へ」
+** 説明を記入して「次へ」
+** 「CSVファイルをダウンロード」
+
+=== RDSへのテーブル構築とアプリケーション実装
+* https://news.mynavi.jp/techplus/article/techp4426/[（元ネタ）Amazon RDSにアクセスするSpringアプリケーション(2)]
+
+==== 変更点
+* AWSではなくローカルのWidowsから操作（DB接続、アプリケーションの実施）
+* ローカルのWidowsからRDSのPostgresを操作できるように環境準備
+** ローカルのwindowsからPostgresにアクセスするためにPSQLクライアントをインストール + 
+https://go-journey.club/archives/14411[【PostgreSQL】Windows に psql コマンドだけをインストールする手順]
+* ローカルのVSCodeにおいてRDS用のAWS認証情報の追加作成（<<VSCodeにおけるAWS認証情報の追加作成 >>）
+
+==== 手順の補足メモ
+===== SQLの実行
+NOTE: ローカルのVSCodeのターミナルで実行、RDS作成後、接続できるようになるまでに少し時間を要する(？) + 
+（とりあえず10分ほど待ってダメだったので、PC再起動したら接続した…）
+
+* DB接続コマンド： `psql -U [DBのマスターユーザ名] -d [最初に作成したDB名] -h [DBのエンドポイント]` + 
+実際のコマンド例：`psql -U postgres -d postgres -h XXXXXXX.XXXXXXX.ap-northeast-1.rds.amazonaws.com`
+* パスワードを手入力して[Enter]
+* https://github.com/debugroom/mynavi-sample-aws-rds/blob/master/ermaster/sql/sample_database_schema_postgresql.sql[GitHubのSQL] をコピーして、コマンド実行フォルダに「sample_database.sql」を作成し、以下コマンドでSQLを実行 + 
+`\i sample_database.sql`
+* コマンド補足：
+** テーブル一覧表示コマンド：`\dt`
+** PSQLを抜けるコマンド：`\q`
+
+===== VSCodeにおけるAWS認証情報の追加作成
+* VSCodeの拡張機能「AWS Toolkit」の「DEVELOPER TOOLS ＞ Connected with profile」を押下
+* 「Add New Connection」を選択
+* 「Use IAM Credentials」を選択
+* profile name ：rds-user[Enter] （任意の名前でOK）
+* AWS Access Key： CSVのAccess key IDを入力[Enter]
+* AWS Secret access key： CSVのSecret access keyを入力[Enter]
+* 再度「Connected with profile」を押下
+* 「Edit Credentials」を押下して、credentialsの作成したユーザ（res-user）に念のため以下の2行を追加して保存（Ctrl+S） + 
+`region = ap-northeast-1` + 
+`output = json`
+
+===== アプリケーションのソースコードの準備
+* https://github.com/debugroom/mynavi-sample-aws-rds[GitHub]からソースコードをZipでダウンロードして、必要個所を修正
+* application-dev.xmlを変更
+** (Cloud/aws/credentials)profileName: rds-user（上記で設定した値へ）
+** (rds)identifier: ${RDS_IDENTIFIER:[DSインスタンス名]}
+** (rds)password: ${RDS_PASSWORD:[DBパスワード]}
+
+=== RDSの作成・プログラムからのアクセス用のユーザ認証情報の作成
+* https://news.mynavi.jp/techplus/article/techp4449/[（元ネタ）Amazon RDSにアクセスするSpringアプリケーション(3)]
+
+==== 変更点
+* 特になし（GitHubの物を使ったので特に追記などは必要なし）
+* [line-through]#（RDSの設定の設定の誤りだったOK）ただし、エラーになったので下記<<エラー発生対応>>の「暫定対応」を実施#
+
+==== エラー発生対応
+// [horizontal]
+発生したエラー::
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/debugroom/mynavi/sample/aws/rds/config/JpaConfig.class]: Invocation of init 
+method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] + 
+（略） + 
+Caused by: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] + 
+（略） + 
+Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo cannot be null when 'hibernate.dialect' not set
+
+原因:: "spring-cloud-starter-aws-jdbc ライブラリ"によるDB情報の自動取得が上手くいっていない模様
+
+根本対応:: 最初にRDSを作成した際に「追加設定」の「最初のデータベース設定」でDB名を設定せず、デフォルトのpostgresを利用していたため、"spring-cloud-starter-aws-jdbc ライブラリ"を利用してのDB情報の取得が上手くいかなかった模様 + 
+RDSを作り直して「追加設定」の「最初のデータベース設定」を設定しておけば、正しく動作した。
+
+暫定対応:: "spring-cloud-starter-aws-jdbc ライブラリ"を利用しないようにソースコードを変更 + 
+* （変更）pom.xmlから`spring-cloud-starter-aws-jdbc`の定義をコメントアウト
+* （変更）RdsConfig.java …　エラーになるimport分と、@EnableRdsInstanceの定義をコメントアウト
+* （変更）application-dev.yml … https://intellectual-curiosity.tokyo/2019/04/21/spring-boot%E3%81%A7%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/#DB-2[こちら]を参考に下記定義を追加 + 
+[source, yml]
+----
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://[DBエンドポイント]:5432/postgres
+    username: postgres
+    password: [DBパスワード]
+----
+上記にしておくとDBに直アクセスする方法で動作する。 + 
+cloud:定義のIAMの認証やrds:のについては利用しなくなる。
+
+===== そのほか、試して治らなかった方法
+
+（仮説検証）IAMのアカウントが取得できてないと仮定して、application.xmlにアクセスキー直書きしてみる:: 
+* 下記対応の結果： ⇒ 実行後エラー変化なし
+* 対応： https://reasonable-code.com/spring-boot-aws-local/[こちら]を参考にapplication-dev.xmlに直接アクセスキーとシークレットアクセスキーを設定してみた 
+[source, yml]
+----
+cloud:
+  aws:
+    credentials:
+      # profileName: rds-user
+      # instanceProfile: false
+      #アクセスキー ID
+      accessKey: [IAMのAccess key ID]
+      #シークレットアクセスキー
+      secretKey: [IAMのSecret access key]
+    stack:
+      # CloudFormationのスタック名を自動取得しない
+      auto: false
+    region:
+      auto: false
+      static: ap-northeast-1
+----
+
+（警告解消）application.xmlに対するrds:プロパティのメタデータ定義の警告を解消::
+* 下記対応の結果： ⇒ 警告は解消されたが、実行後エラー変化なし
+* 警告メッセージ：`Unknown property 'rds'`
+* 対応： 警告マークの電球をクリックして `Create metadata for 'rds.identifier'.` と `Create metadata for 'rds.password'.` を実行してファイルを作成し、jsonが壊れてしまったのを整形して以下ファイルを作成
+** META-INF\additional-spring-configuration-metadata.json
+[source, json]
+----
+{"properties": [{
+  "name": "rds.password",
+  "type": "java.lang.String",
+  "description": "A description for 'rds.password'"
+}, {
+  "name": "rds.identifier",
+  "type": "java.lang.String",
+  "description": "A description for 'rds.identifier'"
+}]}
+----
+
+（情報解消）pom.xmlのspringの新バージョンあるよ警告に対応::
+* 下記対応の結果： ⇒ 警告は解消され（新たに2.7.11.RELEASEが最新の警告が表示）たが、実行後エラー変化なし
+* 情報メッセージ： `Newer patch version of Spring Boot available: 2.1.18.RELEASE`
+* 対応： pom.xmlの下記のバージョンを変更（2.1.XX系の最新に上げている予定）
+** （parent）pring-boot-starter-parentのversion: 2.1.18.RELEASE
+** （properties）spring-cloud.version: Greenwich.SR6
+
+
+（VSCodeの警告解消）pom.xmlの最新でビルドされていないよ警告のためリロード:: 
+* 下記対応の結果： ⇒ 警告は解消されたが、実行後エラー変化なし
+* 警告メッセージ： `Project configuration is not up-to-date with pom.xml, requires an update.`
+* 対応： pom.xmlを右クリックして[Reload Projects]実行 + 
+
+==== 補足
+* アプリケーションの実行で生成したレコードの削除用のSQL + 
+（VSCodeのターミナルに張り付ける場合に、[Ctrl + V]だと上手くいかず、マウスの右クリックで許可して実行）
+[source, sql]
+----
+Truncate table membership;
+Truncate table address;
+Truncate table email;
+Truncate table grp CASCADE;
+Truncate table usr CASCADE;
+----

@@ -14,8 +14,14 @@ endif::[]
 include::../headerLevel2.adoc[]
 
 // API GatewayとLambdaを使ったサーバレスSpringアプリケーション
-include::cnafLambda.adoc[]
+include::01-01_cnafLambda.adoc[]
 
 // AWS ECS上に構築するSpringアプリケーション
-include::cnafEcs.adoc[]
+include::01-02_cnafEcs.adoc[]
+
+// Amazon RDSにアクセスするSpringアプリケーション
+include::01-03_cnaf_rds.adoc[]
+
+// Amazon DynamoDBにアクセスするSpringアプリケーション
+include::01-04_cnaf_dynamo.adoc[]
 

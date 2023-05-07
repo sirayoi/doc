@@ -12,9 +12,9 @@ mkdir_and_copy \
 $(DEST_DIR)/index.html \
 $(DEST_DIR)/sample.html \
 $(DEST_DIR)/study/01-00_dynamoDB.html \
-$(DEST_DIR)/ff14/ff14.html \
-$(DEST_DIR)/tutorial/tutorial.html \
-$(DEST_DIR)/memo/devEnv.html \
+$(DEST_DIR)/ff14/01-00_ff14.html \
+$(DEST_DIR)/tutorial/01-00_tutorial.html \
+$(DEST_DIR)/memo/01-00_devEnv.html \
 
 .PHONY: adoc mkdir_and_copy
 
