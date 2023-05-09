@@ -16,11 +16,11 @@ include::../headerLevel2.adoc[]
 
 * https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Introduction.html[AWSデベロッパーガイド抜粋]
 
-include::01-0101_devguid_function.adoc[]
-
 include::01-0102_devguid_component.adoc[]
 
 include::01-0103_devguid_api.adoc[]
+
+include::01-0101_devguid_function.adoc[]
 
 === 仕組み（パーティションとデータ配置、）
 
@@ -34,7 +34,7 @@ include::01-0103_devguid_api.adoc[]
 |===
 | 章 | 状況
 
-| Amazon DynamoDB とは    | 読了済
+| Amazon DynamoDB とは    | まとめ中
 | DynamoDB のセットアップ | スキップ
 | DynamoDB にアクセスする | スキップ
 | DynamoDB の使用開始 | スキップ
@@ -58,7 +58,6 @@ include::01-0103_devguid_api.adoc[]
 [cols=2,options="header"]
 |===
 | 章 | 状況
-
 | DynamoDB のセットアップ | スキップ
 | DynamoDB にアクセスする | スキップ
 | DynamoDB の使用開始 | スキップ
