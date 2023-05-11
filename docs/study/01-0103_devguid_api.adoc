@@ -1,10 +1,10 @@
 === Amazon DynamoDBのAPI
 // [cols=2*,options="header",cols="25,75"]
 
-NOTE:: 疑問
-【?】BatchWriteItem、BatchGetItemも1つ以上のテーブルに対しての処理が可能の認識だが良いか？
-     BatchGetItemとTransactGetItemsの違いは？トランザクションの保証？
-【?】トランザクションには上限制限なし？
+NOTE:: 疑問 + 
+【?】BatchWriteItem、BatchGetItemも1つ以上のテーブルに対しての処理が可能の認識だが良いか？ + 
+     BatchGetItemとTransactGetItemsの違いは？トランザクションの保証？ + 
+【?】トランザクションには上限制限なし？ + 
 【?】 DynamoDB Streams APIについてはさっぱりわかっていない
 
 ==== APIの種類
@@ -31,7 +31,7 @@ NOTE:: 疑問
 |===
 
 ==== テーブルの項目に対する操作API（データプレーン API と トランザクション API）
-[cols="10,5,5,15,5,5,10,20"]
+[cols="10,5,5,15,5,5,10,20a"]
 |===
 .2+| 特徴 
 .2+| Classic API 
@@ -45,35 +45,42 @@ NOTE:: 疑問
 .4+| 単一項目操作 
 | PutItem | ExecuteStatement INSERT | 単一項目の作成 | ○ | － | 必須 | －
 | GetItem | ExecuteStatement SELECT | 単一項目の取得 | － | ○ | 必須 | －
-| UpdateItem | ExecuteStatement UPDATE | 単一項目の更新 | ○ | － | 必須 | ・ユーザ定義の条件を満たす場合のみ更新が成功する条件付き更新実行が可能（`ConditionExpression`） + 
-・アトミックカウンター利用可能
+| UpdateItem | ExecuteStatement UPDATE | 単一項目の更新 | ○ | － | 必須 | * ユーザ定義の条件を満たす場合のみ更新が成功する条件付き更新実行が可能（`ConditionExpression`） + 
+* アトミックカウンター利用可能
 | DeleteItem | ExecuteStatement DELETE | 単一項目の削除 | ○ | － | 必須 | ユーザ定義の条件を満たす場合のみ削除が成功する条件付き削除実行が可能（`ConditionExpression`）
 
 .3+| 複数項目の検索 
-| BatchGetItem | BatchExecuteStatement SELECT | 複数項目の取得 | － | ○ | 各項目別に必須 | ・GetItemをまとめて実行するイメージ + 
-・１つのバッチ処理で複数テーブルに対して処理可能 + 
-・処理結果は個別に応答される + 
-・最大処理項目数：100
-| Query | ExecuteStatement SELECT | テーブルの特定パーティションキーの全項目の取得 | － | ○ | パーティションキー必須 | ・ソートキーの値を対象とした抽出条件による絞り込み可能(`KeyConditionExpression`) + 
-・フィルタリング条件指定による取捨選択可能(`FilterExpression`)[※1] + 
-・セカンダリインデックスに対しても実行可能
+| BatchGetItem | BatchExecuteStatement SELECT | 複数項目の取得 | － | ○ | 各項目別に必須 
+| * GetItemをまとめて実行するイメージ + 
+* １つのバッチ処理で複数テーブルに対して処理可能 + 
+* 処理結果は個別に応答される + 
+* 最大処理項目数：100
+| Query | ExecuteStatement SELECT | テーブルの特定パーティションキーの全項目の取得 | － | ○ | パーティションキー必須 
+| * ソートキーの値を対象とした抽出条件による絞り込み可能(`KeyConditionExpression`) + 
+* フィルタリング条件指定による取捨選択可能(`FilterExpression`)[※1] + 
+* セカンダリインデックスに対しても実行可能
 
-| Scan | ExecuteStatement SELECT | テーブルの全項目の取得 | － | ○ | 不要 | ・フィルタリング条件指定による取捨選択可能(`FilterExpression`)[※1]  + 
-・セカンダリインデックスに対しても実行可能
+| Scan | ExecuteStatement SELECT | テーブルの全項目の取得 | － | ○ | 不要 
+| * フィルタリング条件指定による取捨選択可能(`FilterExpression`)[※1]  + 
+* セカンダリインデックスに対しても実行可能
 
 | 複数項目の生成 or 削除 + 
 （トランザクション無し）
-| BatchWriteItem | BatchExecuteStatement INSERT or DELETE | 複数項目の作成 or 削除 | ○ | － | 各項目別に必須 | ・単一項目操作（PutItem or DeleteItem）をまとめて実行するイメージ + 
-・処理結果は項目別に返却される（一部成功、一部失敗が発生する） + 
-・１つのバッチ処理で複数テーブルに対して処理可能だが、作成処理と削除処理を同時に実施することはできない + 
-・最大処理項目数：25
+| BatchWriteItem | BatchExecuteStatement INSERT or DELETE | 複数項目の作成 or 削除 | ○ | － | 各項目別に必須 
+| * 単一項目操作（PutItem or DeleteItem）をまとめて実行するイメージ + 
+* 処理結果は項目別に返却される（一部成功、一部失敗が発生する） + 
+* １つのバッチ処理で複数テーブルに対して処理可能だが、作成処理と削除処理を同時に実施することはできない + 
+* 最大処理項目数：25
 
 .2+| 複数項目操作 + 
 （トランザクション）
-| TransactGetItems  | ExecuteTransaction SELECT  |  1つ以上のテーブルからの複数項目取得  | － | ○ | 各項目別に必須 | ・単一項目操作（GetItem）をまとめて実行するイメージ + 
-・一部の処理に失敗した場合、すべての処理がロールバックされる
-| TransactWriteItems  | ExecuteTransaction INSERT or UPDATE or DELETE  | オールオアナッシングの結果が保証された複数項目変更（作成 or 更新 or 削除） | ○ | － | 各項目別に必須 | ・単一項目操作（PutItem or UpdateItem or DeleteItem）をまとめて実行するイメージ + 
-・一部の処理に失敗した場合、すべての処理がロールバックされる
+| TransactGetItems  | ExecuteTransaction SELECT  |  1つ以上のテーブルからの複数項目取得  | － | ○ | 各項目別に必須 
+| * 単一項目操作（GetItem）をまとめて実行するイメージ + 
+* 一部の処理に失敗した場合、すべての処理がロールバックされる
+
+| TransactWriteItems  | ExecuteTransaction INSERT or UPDATE or DELETE  | オールオアナッシングの結果が保証された複数項目変更（作成 or 更新 or 削除） | ○ | － | 各項目別に必須 
+| * 単一項目操作（PutItem or UpdateItem or DeleteItem）をまとめて実行するイメージ + 
+* 一部の処理に失敗した場合、すべての処理がロールバックされる
 |===
 
 
