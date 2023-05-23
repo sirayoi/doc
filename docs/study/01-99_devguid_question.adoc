@@ -1,0 +1,124 @@
+=== 疑問一覧
+[cols="4*", options="headers", cols="5,30a,20a,20a"]
+|===
+| ステータス | 疑問 | 状況 | 補足
+
+| 調査中
+| データ型のバイナリ説明の下記の３つめの「バイナリ属性の長さは 0 」とはどういうことか？ + 
+
+> 属性がインデックスまたはテーブルのキーとして使用されず、DynamoDB 項目の最大サイズ上限が 400 KB に制約されている場合、バイナリ属性の長さは 0 になります。
+
+| ？？？
+| https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html[サポートされるデータ型と命名規則のバイナリ]
+
+| 継続調査中
+| DynamoDB Streams APIについて、あまり分かっていない（別途しっかり調べる、一旦後回し）
+| －
+| －
+
+| 解決(5/18) 
+| トランザクション系APIには実行数の上限に制限は無いのか？
+| 右記にて、制限が100個である旨記載
+| https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/transaction-apis.html[トランザクションでの使用の使用方法]
+
+| 解決(5/18) 
+| BatchWriteItem、BatchGetItemも1つ以上のテーブルに対しての処理が可能の認識だが正しいか？
+| 右記にて、複数テーブル更新できる旨の記載あり
+| https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/WorkingWithItems.html#WorkingWithItems.BatchOperations[バッチオペレーション]
+
+| 解決(5/11) 
+| セカンダリインデックスのキー説明で「プライマリキー」と表現されているが、セカンダリインデックス内では「同一プライマリキーの重複データを許す」と思っているが問題ないか？ + 
+* https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/SecondaryIndexes.html[トランザクションでの使用の使用方法]
+
+| 下記URLの説明の図でも、同一インデックスキー値（Rock,The Buck Starts Here）での重複を許しており、塾長からも問題ないはずとのコメントを頂戴した + 
+* https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html[コアコンポーネントのセカンダリインデックスの説明]
+
+| （5/23:追記）「DynamoDB テーブルでは、各キー値は一意である必要があります。ただし、グローバルセカンダリインデックスのキー値は一意である必要はありません。」との説明を発見 + 
+https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GSI.html[DynamoDB のグローバルセカンダリインデックスの使用]
+
+
+| 解決(5/11) 
+| BatchGetItemとTransactGetItemsの違いは？トランザクションの保証の有無のみ？
+| 塾長よりその認識で問題なしとのご回答あり
+| －
+
+|===
+
+=== 解釈に関しての確認したい事項
+[cols="4*", options="headers", cols="5,30a,20a,20a"]
+|===
+| ステータス | 確認したい解釈 | 状況 | 補足
+
+| 起票
+| 特殊文字の説明が特にないのだが、各文字の説明は<<特殊文字>>でよいだろうか…。 + 
+
+> # (ハッシュ) および : (コロン) に特別な意味があります。
+
+| ？？？
+| https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html[サポートされるデータ型と命名規則の予約語と特殊文字]
+
+| 解決(5/11) 
+| セカンダリインデックスについて、インデックスというよりは「RDBで言うところの更新できないマテリアライズドビュー（実態を持つ表）」という解釈をしたが、いかがか？
+| 塾長より、おおむねその理解でよいが「テーブルを更新すればセカンダリインデックスの値も更新されるので、更新できないというのは不適切かも」とのご回答あり
+| 文言を見直し「単一テーブルからなる検索専用のマテリアライズドビュー」とした
+
+|===
+
+
+=== メモアウト（消すか迷い中）
+* 主な機能
+** データを保存および取得するテーブルの作成・操作
+** リクエストトラフィックを処理
+** テーブルのスループット容量をスケールアップまたはスケールダウンできます
+** Amazon DynamoDB Transactions：1 つのオースオアナッシングオペレーションとして複数の項目の追加、更新、または削除が必要となる複雑なビジネスワークフローを管理できます
+** DynamoDB Streams：DynamoDB：テーブル内の項目レベルの変更に関するシーケンスを時間順にキャプチャし、その情報を最大 24 時間ログに保存
+** DynamoDB Accelerator (DAX) ：DynamoDB と互換性のあるキャッシュサービス、整合性データへのアクセス時に素早い対応を実現
+
+* オプション機能：
+** オンデマンドバックアップ機能：完全なバックアップ、長期間の保存とアーカイブ
+** オンデマンドバックアップ機能_ポイントインタイムリカバリ：上書き削除不可、過去 35 日間の任意の時点にテーブルを復元
+** 有効期限（TTL）：テーブルから有効期限切れの項目を自動的に削除できる
+** グローバルテーブル：DynamoDB テーブルを AWS リージョン間で同期させる
+** AWS Management Console を使用して、リソースの使用率とパフォーマンスメトリクスをモニタリングできます
+
+* マネージドサービスとして任せられる作業：
+** データベースの運用とスケーリングに伴う管理作業をお任せ
+*** ハードウェアのプロビジョニング、設定と構成、レプリケーション、ソフトウェアパッチ適用、クラスタースケーリングなど
+** 高い可用性と耐久性
+*** テーブルのデータとトラフィックが十分な数のサーバーに自動的に分散
+*** AWS リージョン内の複数のアベイラビリティーゾーン間で自動的にレプリケート
+*** グローバルテーブルを使用して、DynamoDB テーブルを AWS リージョン間で同期させることができます
+** 保管時の暗号化
+
+=== 作業状況メモ
+
+* 調査状況（概要理解）：
+** reInvent2018（AWSアーキテクチャ）：YouTube確認済み
+** AWSデベロッパーガイド：読み込み・まとめ着手中
+
+[cols=2,options="header"]
+|===
+| 章 | 状況
+
+| Amazon DynamoDB とは    | まとめ中
+| DynamoDB のセットアップ | スキップ
+| DynamoDB にアクセスする | スキップ
+| DynamoDB の使用開始 | スキップ
+| DynamoDB および AWS SDK の使用開始 | スキップ 
+| DynamoDB を使用したプログラミング | スキップ
+| DynamoDB の操作 | 読了中
+| DAX とインメモリアクセラレーション | 未確認
+| NoSQL Workbench | 未確認
+| コード例 | スキップ（例は見てもいいかも）
+| セキュリティ | 未確認
+| Monitoring | 未確認
+| ベストプラクティス | 読了中
+| 他の AWS サービスとの統合 | 未確認
+| クォータと制限 | 未確認
+| API リファレンス | スキップ
+| 付録 | 未確認
+| ドキュメント履歴 | スキップ
+|===
+
+=== AsciiDocのサンプルコードメモ
+image:./images/Arch_Amazon-EC2_64.png["EC2画像"]

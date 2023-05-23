@@ -12,62 +12,25 @@ endif::[]
 
 include::../headerLevel2.adoc[]
 
-== AWSデベロッパーガイド Amazon DynamoDB 抜粋・解釈
-
-* https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Introduction.html[AWSデベロッパーガイド抜粋]
-
-include::01-0102_devguid_component.adoc[]
-
-include::01-0103_devguid_api.adoc[]
+== Amazon DynamoDB の情報まとめ
+=== 参考情報
+* AWSデベロッパーガイド Amazon DynamoDB 抜粋・解釈
+** https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Introduction.html[AWSデベロッパーガイド抜粋]
+* AWS re:Invent 2018: Amazon DynamoDB Under the Hood: How We Built a Hyper-Scale Database (DAT321)
+** https://www.youtube.com/watch?v=yvBR71D0nAQ[YouTube（AWS re:Invent 2018：DAT321）]
 
 include::01-0101_devguid_function.adoc[]
 
-=== 仕組み（パーティションとデータ配置、）
+include::01-0102_devguid_component.adoc[]
 
+include::01-0104_devguid_data_and_naming.adoc[]
 
-=== リレーショナルDBとの違い
+include::01-0103_devguid_api.adoc[]
 
+include::01-0105_devguid_nosql_rdb.adoc[]
 
-===== 作業メモ
-* 調査状況（概要理解）：AWSデベロッパーガイド
-[cols=2,options="header"]
-|===
-| 章 | 状況
+include::01-0201_reInvent2018_architecture.adoc[]
 
-| Amazon DynamoDB とは    | まとめ中
-| DynamoDB のセットアップ | スキップ
-| DynamoDB にアクセスする | スキップ
-| DynamoDB の使用開始 | スキップ
-| DynamoDB および AWS SDK の使用開始 | スキップ 
-| DynamoDB を使用したプログラミング | スキップ
-| DynamoDB の操作 | スキップ
-| DAX とインメモリアクセラレーション | 未確認
-| NoSQL Workbench | 未確認
-| コード例 | スキップ（例は見てもいいかも）
-| セキュリティ | 未確認
-| Monitoring | 未確認
-| ベストプラクティス | 読了中
-| 他の AWS サービスとの統合 | 未確認
-| クォータと制限 | 未確認
-| API リファレンス | スキップ
-| 付録 | 未確認
-| ドキュメント履歴 | スキップ
-|===
+== 作業メモおよび疑問
 
-* 調査状況（実施）：AWSデベロッパーガイド
-[cols=2,options="header"]
-|===
-| 章 | 状況
-| DynamoDB のセットアップ | スキップ
-| DynamoDB にアクセスする | スキップ
-| DynamoDB の使用開始 | スキップ
-| DynamoDB および AWS SDK の使用開始 | スキップ 
-| DynamoDB を使用したプログラミング | スキップ
-| DynamoDB の操作 | スキップ
-| NoSQL Workbench | スキップ
-| コード例 | スキップ
-| API リファレンス | スキップ
-|===
-
-
-image:./images/Arch_Amazon-EC2_64.png["EC2画像"]
+include::01-99_devguid_question.adoc[]

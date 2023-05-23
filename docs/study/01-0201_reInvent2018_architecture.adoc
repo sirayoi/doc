@@ -1,0 +1,5 @@
+=== Amazon DynamoDBのアーキテクチャ（2018時点）
+* AWS re:Invent 2018: Amazon DynamoDB Under the Hood: How We Built a Hyper-Scale Database (DAT321)
+** https://www.youtube.com/watch?v=yvBR71D0nAQ[YouTube（AWS re:Invent 2018：DAT321）]
+
+NOTE:: 作成中
