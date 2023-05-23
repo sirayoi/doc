@@ -50,7 +50,15 @@ https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GSI.html[
 | ステータス | 確認したい解釈 | 状況 | 補足
 
 | 起票
-| 特殊文字の説明が特にないのだが、各文字の説明は<<特殊文字>>でよいだろうか…。 + 
+| （念のため）トランザクションの競合時は、先勝ち・後エラー（同一トランザクション内で競合した場合はそれ自体がエラー）という解釈で大丈夫か？ + 
+先（継続中のトランザクション・更新処理）も、後（競合したトランザクション・更新処理）も両方エラーになるという事では無いですよね？
+| ？？？
+| https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/transaction-apis.html#transaction-conflict-handling[DynamoDB でのトランザクション競合の処理]
+
+
+
+| 起票
+| 特殊文字の説明が特にないのだが、各文字の説明は<<特殊文字>>でよいだろうか？ + 
 
 > # (ハッシュ) および : (コロン) に特別な意味があります。
 
