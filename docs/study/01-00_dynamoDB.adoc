@@ -27,9 +27,9 @@ include::01-0104_devguid_data_and_naming.adoc[]
 
 include::01-0103_devguid_api.adoc[]
 
-include::01-0105_devguid_nosql_rdb.adoc[]
-
 include::01-0201_reInvent2018_architecture.adoc[]
+
+include::01-0301_devguid_rdb_design.adoc[]
 
 == 作業メモおよび疑問
 
