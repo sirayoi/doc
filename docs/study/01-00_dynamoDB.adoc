@@ -31,6 +31,10 @@ include::01-0201_reInvent2018_architecture.adoc[]
 
 include::01-0301_devguid_rdb_design.adoc[]
 
+== Amazon DynamoDB の設計について考える
+
+include::02-0101_design.adoc[]
+
 == 作業メモおよび疑問
 
 include::01-99_devguid_question.adoc[]
