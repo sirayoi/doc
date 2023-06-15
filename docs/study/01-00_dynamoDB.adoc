@@ -18,6 +18,8 @@ include::../headerLevel2.adoc[]
 ** https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Introduction.html[AWSデベロッパーガイド抜粋]
 * AWS re:Invent 2018: Amazon DynamoDB Under the Hood: How We Built a Hyper-Scale Database (DAT321)
 ** https://www.youtube.com/watch?v=yvBR71D0nAQ[YouTube（AWS re:Invent 2018：DAT321）]
+* Amazon DynamoDB Well-Architected Lens - Performance Efficiency | Amazon Web Services
+** https://www.youtube.com/watch?v=PuCIy5Weyi8[YouTube（DynamoDB Well-Architected Lens）]
 
 include::01-0101_devguid_function.adoc[]
 
@@ -29,7 +31,7 @@ include::01-0103_devguid_api.adoc[]
 
 include::01-0201_reInvent2018_architecture.adoc[]
 
-include::01-0301_devguid_rdb_design.adoc[]
+include::01-0301_devguid_nosql_design.adoc[]
 
 == Amazon DynamoDB の設計について考える
 
